@@ -104,7 +104,7 @@ class _ShowAppoinmentsState extends State<ShowAppoinments> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(DocName ?? ''),
+                    Text(DocName),
                     Text(appointment.date),
                     Text(appointment.time),
                     Text(appointment.status),
