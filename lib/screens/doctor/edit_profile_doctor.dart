@@ -35,27 +35,49 @@ class _EditProfileDoctorState extends State<EditProfileDoctor> {
     var url = Uri.parse(
         'https://api.realhack.saliya.ml:9696/api/v1/admin/update/$uid');
 
+    //
+
     var response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
-        'authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MGNkZTQ2ZmVmN2M0Zjc1NTBjNDQ4MCIsInJvbGUiOiJkb2N0b3IiLCJpYXQiOjE2Nzg1NzYxODMsImV4cCI6MTY4MTE2ODE4M30.KiFngcQf6SofXFze_DKj0W03hCpuog81opSuiTOyhsM',
+        'authorization':token,
       },
       body: json.encode({
         'regNumber': regNumberController.text,
-        'specialization': "Family",
+        // 'specialization': "Family",
         'address': addressController.text,
         'telephone': telephoneController.text,
-        'activeTimes': selectedActiveTimes,
+        'activeTimes': json.encode(selectedActiveTimes),
         'name': nameController.text,
         'email': emailController.text,
       }),
     );
-    print(selectedActiveTimes);
+
     var responseData = json.decode(response.body);
     // handle the response data here
-    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Updated Successfully!'),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return true;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.body),
+          duration: Duration(seconds: 3),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      // print(response.body);
+      return false;
+    }
   }
 
   @override
@@ -146,8 +168,8 @@ class _EditProfileDoctorState extends State<EditProfileDoctor> {
                                             onPressed: () {
                                               if (max > 0) {
                                                 selectedActiveTimes.add({
-                                                  "\"time\"": time,
-                                                  "max": max,
+                                                  "time": '$time',
+                                                  "max": '$max',
                                                 });
                                                 Navigator.of(context).pop();
                                               }
