@@ -38,7 +38,10 @@ class MyHomePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SvgPicture.asset("assets/icons/splash_bg.svg"),
+          SvgPicture.asset(
+            "assets/icons/splash_bg.svg",
+            fit: BoxFit.fill,
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.00),
