@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'profile.dart';
 import 'showAppointment.dart';
-import 'edit_profile_doctor.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:codingblinders/main.dart';
@@ -14,7 +14,7 @@ class _DoctorViewState extends State<DoctorView> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    EditProfileDoctor(),
+    ProfilePage(),
     DoctorViewWidget(),
     AppointmentList(),
   ];

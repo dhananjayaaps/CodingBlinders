@@ -17,89 +17,98 @@ class ProfilePage extends StatelessWidget {
         body: FutureBuilder(
             future: fetchDoctor(),
             builder: (context, snapshot) {
+              print(snapshot.toString());
               if (snapshot.hasData) {
                 final doctor = snapshot.data as Doctormodel;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                        child: Image.asset('assets/icons/female-doctor.jpg')),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Name: ${doctor.name}',
-                        style: TextStyle(fontSize: 18),
+                return SingleChildScrollView (
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 15,
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Email: ${doctor.email}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Specialization: ${doctor.specialization}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Registration Number: ${doctor.regNumber}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Address: ${doctor.address}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Telephone: ${doctor.telephone}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'Active Times:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var activeTime in doctor.activeTimes)
-                            Text(
-                              '- ${activeTime.getTime()} (max: ${activeTime.getMax()})',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditProfileDoctor()),
+                      Center(
+                          child: Image.asset('assets/icons/female-doctor.jpg')),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Name: ${doctor.name}',
+                          style: TextStyle(fontSize: 18),
                         ),
-                        child: Text('Update Data'),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Email: ${doctor.email}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Specialization: ${doctor.specialization}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Registration Number: ${doctor.regNumber}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Address: ${doctor.address}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Telephone: ${doctor.telephone}',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Active Times:',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var activeTime in doctor.activeTimes)
+                              Container(
+                                color: Colors.black26,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '- ${activeTime.getTime()} (max: ${activeTime.getMax()})',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileDoctor()),
+                          ),
+                          child: Text('Update Data'),
+                        ),
+                      )
+                    ],
+                  ),
                 );
               } else {
                 return Center(child: CircularProgressIndicator());
@@ -124,6 +133,7 @@ Future<Doctormodel> fetchDoctor() async {
 
   if (response.statusCode == 200) {
     final json = jsonDecode(response.body);
+    print(response.body);
     return Doctormodel(
       name: json['name'],
       email: json['email'],
@@ -132,7 +142,8 @@ Future<Doctormodel> fetchDoctor() async {
       address: json['address'],
       telephone: json['telephone'],
       activeTimes: List<ActiveTime>.from(json['activeTimes']
-          .map((x) => ActiveTime(time: x['time'], max: x['max']))),
+          .map((x) => ActiveTime(time: x['time'], max: int.parse(x['max'])))),
+
     );
   } else {
     throw Exception('Failed to fetch doctor');
